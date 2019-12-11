@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="http://schemas.android.com/apk/res-auto" tools:ignore="ExtraTranslation">
+
+    <!-- App -->
+    <string name="app_name">Brita</string>
+
+    <!-- Main -->
+    <string name="main_max">最大次數：<xliff:g name="name">%d</xliff:g></string>
+    <string name="main_sub">-</string>
+    <string name="main_reset">0</string>
+    <string name="main_add">+</string>
+
+</resources>
