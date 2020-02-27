@@ -5,6 +5,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.fongmi.android.brita.adapter.RecordAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -12,15 +16,14 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
-	@BindView(R.id.max) TextView mMax;
+	@BindView(R.id.recyclerView) RecyclerView mRecyclerView;
 	@BindView(R.id.count) TextView mCount;
+	@BindView(R.id.max) TextView mMax;
+
+	private RecordAdapter mAdapter;
 
 	private int getMax() {
 		return Prefers.getInt("max", 50);
-	}
-
-	private int getCount() {
-		return Prefers.getInt("count");
 	}
 
 	@Override
@@ -29,32 +32,44 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 		ButterKnife.bind(this);
 		initView();
+		initEvent();
 	}
 
 	private void initView() {
 		mMax.setText(getString(R.string.main_max, getMax()));
-		mCount.setText(String.valueOf(getCount()));
+		setRecyclerView();
+		updateCount();
 	}
 
-	@OnClick({R.id.sub, R.id.reset, R.id.add})
-	public void onClick(View view) {
-		setCount(view.getId(), getCount());
-		mCount.setText(String.valueOf(getCount()));
+	private void initEvent() {
+		mAdapter.setOnItemClickListener(this::onSub);
 	}
 
-	private void setCount(int id, int count) {
-		switch (id) {
-			case R.id.sub:
-				if (count == 0) return;
-				Prefers.put("count", --count);
-				break;
-			case R.id.reset:
-				Prefers.put("count", 0);
-				break;
-			case R.id.add:
-				if (count == getMax()) return;
-				Prefers.put("count", ++count);
-				break;
-		}
+	private void setRecyclerView() {
+		mAdapter = new RecordAdapter();
+		mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+		mRecyclerView.setAdapter(mAdapter);
+	}
+
+	private void updateCount() {
+		mCount.setText(String.valueOf(mAdapter.getItemCount()));
+		mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount());
+	}
+
+	public void onSub(int position) {
+		mAdapter.sub(position);
+		updateCount();
+	}
+
+	@OnClick(R.id.add)
+	public void onAdd() {
+		if (mAdapter.getItemCount() < getMax()) mAdapter.add();
+		updateCount();
+	}
+
+	@OnClick(R.id.reset)
+	public void onReset(View view) {
+		mAdapter.reset();
+		updateCount();
 	}
 }

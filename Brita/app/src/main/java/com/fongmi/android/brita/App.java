@@ -1,19 +1,20 @@
 package com.fongmi.android.brita;
 
 import android.app.Application;
-import android.content.Context;
 
 public class App extends Application {
 
 	private static App instance;
 
+	public App() {
+		instance = this;
+	}
+
 	public static App getInstance() {
 		return instance;
 	}
 
-	@Override
-	protected void attachBaseContext(Context base) {
-		super.attachBaseContext(base);
-		App.instance = this;
+	public static String getName() {
+		return getInstance().getString(R.string.app_name).toLowerCase();
 	}
 }
