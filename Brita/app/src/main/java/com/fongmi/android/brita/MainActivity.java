@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void initView() {
-		mMax.setText(getString(R.string.main_max, getMax()));
+		mMax.setText(getString(R.string.max, getMax()));
 		setRecyclerView();
 		updateCount();
 	}
