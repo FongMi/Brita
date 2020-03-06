@@ -4,20 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/max"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/listPreferredItemHeightSmall"
-        android:gravity="center"
-        android:textSize="16sp"
-        tools:text="最大次數：50" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/count"
-        android:layout_below="@+id/max" />
+        android:layout_above="@+id/count" />
 
     <TextView
         android:id="@+id/count"

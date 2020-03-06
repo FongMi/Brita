@@ -3,9 +3,10 @@ package com.fongmi.android.brita;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fongmi.android.brita.adapter.RecordAdapter;
@@ -14,13 +15,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecordAdapter.OnItemClickListener {
 
 	@BindView(R.id.recyclerView) RecyclerView mRecyclerView;
 	@BindView(R.id.count) TextView mCount;
-	@BindView(R.id.max) TextView mMax;
 
 	private RecordAdapter mAdapter;
+	private Toast mToast;
 
 	private int getMax() {
 		return Prefers.getInt("max", 50);
@@ -36,40 +37,47 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void initView() {
-		mMax.setText(getString(R.string.max, getMax()));
 		setRecyclerView();
-		updateCount();
+		refresh(true);
 	}
 
 	private void initEvent() {
-		mAdapter.setOnItemClickListener(this::onSub);
+		mAdapter.setOnItemClickListener(this);
 	}
 
 	private void setRecyclerView() {
 		mAdapter = new RecordAdapter();
-		mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+		mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 		mRecyclerView.setAdapter(mAdapter);
 	}
 
-	private void updateCount() {
+	private void refresh(boolean scroll) {
 		mCount.setText(String.valueOf(mAdapter.getItemCount()));
-		mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount());
-	}
-
-	public void onSub(int position) {
-		mAdapter.sub(position);
-		updateCount();
+		if (scroll) mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount());
 	}
 
 	@OnClick(R.id.add)
 	public void onAdd() {
 		if (mAdapter.getItemCount() < getMax()) mAdapter.add();
-		updateCount();
+		refresh(true);
 	}
 
 	@OnClick(R.id.reset)
 	public void onReset(View view) {
-		mAdapter.reset();
-		updateCount();
+		mAdapter.clear();
+		refresh(false);
+	}
+
+	@Override
+	public void onItemClick(String text) {
+		if (mToast != null) mToast.cancel();
+		mToast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+		mToast.show();
+	}
+
+	@Override
+	public void onLongClick(int position) {
+		mAdapter.remove(position);
+		refresh(false);
 	}
 }

@@ -12,7 +12,6 @@ import com.fongmi.android.brita.AppDatabase;
 import com.fongmi.android.brita.R;
 import com.fongmi.android.brita.bean.Record;
 import com.fongmi.android.brita.dao.RecordDao;
-import com.github.bassaer.library.MDColor;
 
 import java.util.List;
 
@@ -31,14 +30,17 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 	}
 
 	public interface OnItemClickListener {
-		void onItemClick(int position);
+
+		void onItemClick(String text);
+
+		void onLongClick(int position);
 	}
 
 	public void setOnItemClickListener(OnItemClickListener itemClickListener) {
 		this.mItemClickListener = itemClickListener;
 	}
 
-	class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+	class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
 		@BindView(R.id.time) TextView time;
 
@@ -46,19 +48,32 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 			super(view);
 			ButterKnife.bind(this, view);
 			view.setOnClickListener(this);
+			view.setOnLongClickListener(this);
 		}
 
 		@Override
 		public void onClick(View view) {
-			mItemClickListener.onItemClick(getLayoutPosition());
+			mItemClickListener.onItemClick(mItems.get(getLayoutPosition()).getTimeText());
+		}
+
+		@Override
+		public boolean onLongClick(View v) {
+			mItemClickListener.onLongClick(getLayoutPosition());
+			return true;
 		}
 	}
 
-	public void sub(int position) {
-		Record item = mItems.get(position);
+	private void notifyItemChanged() {
+		for (int i = 0; i < mItems.size(); i++) {
+			notifyItemChanged(i);
+		}
+	}
+
+	public void remove(int position) {
+		mDao.delete(mItems.get(position).getTime());
 		notifyItemRemoved(position);
-		mDao.delete(item.getTime());
 		mItems.remove(position);
+		notifyItemChanged();
 	}
 
 	public void add() {
@@ -67,7 +82,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 		notifyItemInserted(mItems.size() - 1);
 	}
 
-	public void reset() {
+	public void clear() {
 		mDao.clear();
 		mItems.clear();
 		notifyDataSetChanged();
@@ -87,7 +102,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 		Record item = mItems.get(position);
-		holder.time.setText(item.getFormat());
-		holder.itemView.setBackgroundColor(position % 2 == 0 ? MDColor.BLUE_50 : MDColor.GREEN_50);
+		holder.time.setText(item.getDateText());
+		holder.itemView.setBackgroundColor(item.getColor(position));
 	}
 }

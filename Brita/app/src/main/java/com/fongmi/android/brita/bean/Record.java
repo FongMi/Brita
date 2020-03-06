@@ -3,6 +3,8 @@ package com.fongmi.android.brita.bean;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.github.bassaer.library.MDColor;
+
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -35,8 +37,17 @@ public class Record {
 		this.time = time;
 	}
 
-	public String getFormat() {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd　HH:mm:ss　EEEE", Locale.getDefault());
+	public int getColor(int position) {
+		return position % 2 == 0 ? MDColor.AMBER_200 : MDColor.GREEN_200;
+	}
+
+	public String getDateText() {
+		SimpleDateFormat format = new SimpleDateFormat("MM/dd (EEE)", Locale.getDefault());
+		return format.format(getTime()).replace("週", "");
+	}
+
+	public String getTimeText() {
+		SimpleDateFormat format = new SimpleDateFormat("a hh:mm:ss", Locale.getDefault());
 		return format.format(getTime());
 	}
 }
