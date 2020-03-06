@@ -63,8 +63,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 		}
 	}
 
-	private void notifyItemChanged() {
-		for (int i = 0; i < mItems.size(); i++) {
+	private void notifyColorChange(int position) {
+		for (int i = position; i < mItems.size(); i++) {
 			notifyItemChanged(i);
 		}
 	}
@@ -72,8 +72,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 	public void remove(int position) {
 		mDao.delete(mItems.get(position).getTime());
 		notifyItemRemoved(position);
+		notifyColorChange(position);
 		mItems.remove(position);
-		notifyItemChanged();
 	}
 
 	public void add() {
