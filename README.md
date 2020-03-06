@@ -1,4 +1,4 @@
 # Brita
 
 ## Screenshots
-![Screen](Screenshots/1.jpg)
+![Screen](Screenshots/1.png)
