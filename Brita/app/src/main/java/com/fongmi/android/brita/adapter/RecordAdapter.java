@@ -8,11 +8,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fongmi.android.brita.App;
 import com.fongmi.android.brita.AppDatabase;
 import com.fongmi.android.brita.R;
 import com.fongmi.android.brita.bean.Record;
 import com.fongmi.android.brita.dao.RecordDao;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
@@ -80,6 +80,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 		mDao.clear();
 		mItems.clear();
 		notifyDataSetChanged();
+	}
+
+	public void sync() {
+		FirebaseDatabase.getInstance().getReference().child(App.getAndroidId()).setValue(AppDatabase.getInstance().getDao().getAll());
 	}
 
 	@Override

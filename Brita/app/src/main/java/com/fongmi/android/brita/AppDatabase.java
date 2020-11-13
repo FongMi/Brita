@@ -15,7 +15,7 @@ public abstract class AppDatabase extends RoomDatabase {
 	private static volatile AppDatabase instance;
 
 	public static synchronized AppDatabase getInstance() {
-		if (instance == null) instance = create(App.getInstance());
+		if (instance == null) instance = create(App.get());
 		return instance;
 	}
 

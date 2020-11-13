@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 class Prefers {
 
 	private static SharedPreferences getPrefers() {
-		return PreferenceManager.getDefaultSharedPreferences(App.getInstance());
+		return PreferenceManager.getDefaultSharedPreferences(App.get());
 	}
 
 	static void put(String key, Object obj) {
