@@ -33,7 +33,7 @@ public class Record {
 	}
 
 	public String getText() {
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd HH:mm", Locale.getDefault());
+		SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault());
 		return format.format(getTime());
 	}
 }
