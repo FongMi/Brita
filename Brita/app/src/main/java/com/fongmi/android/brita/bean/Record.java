@@ -11,22 +11,13 @@ import java.util.Locale;
 @Entity
 public class Record {
 
-	@PrimaryKey(autoGenerate = true)
-	private int id;
+	@PrimaryKey
 	private long time;
 
 	public static Record create() {
 		Record record = new Record();
 		record.setTime(System.currentTimeMillis());
 		return record;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public long getTime() {
@@ -41,13 +32,8 @@ public class Record {
 		return position % 2 == 0 ? MDColor.AMBER_200 : MDColor.GREEN_200;
 	}
 
-	public String getDateText() {
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd (EEE)", Locale.getDefault());
-		return format.format(getTime()).replace("週", "");
-	}
-
-	public String getTimeText() {
-		SimpleDateFormat format = new SimpleDateFormat("a hh:mm:ss", Locale.getDefault());
+	public String getText() {
+		SimpleDateFormat format = new SimpleDateFormat("MM/dd HH:mm", Locale.getDefault());
 		return format.format(getTime());
 	}
 }

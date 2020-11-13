@@ -12,6 +12,8 @@ import com.fongmi.android.brita.AppDatabase;
 import com.fongmi.android.brita.R;
 import com.fongmi.android.brita.bean.Record;
 import com.fongmi.android.brita.dao.RecordDao;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -31,8 +33,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
 	public interface OnItemClickListener {
 
-		void onItemClick(String text);
-
 		void onLongClick(int position);
 	}
 
@@ -40,20 +40,14 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 		this.mItemClickListener = itemClickListener;
 	}
 
-	class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+	class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
 		@BindView(R.id.time) TextView time;
 
 		ViewHolder(View view) {
 			super(view);
 			ButterKnife.bind(this, view);
-			view.setOnClickListener(this);
 			view.setOnLongClickListener(this);
-		}
-
-		@Override
-		public void onClick(View view) {
-			mItemClickListener.onItemClick(mItems.get(getLayoutPosition()).getTimeText());
 		}
 
 		@Override
@@ -102,7 +96,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 		Record item = mItems.get(position);
-		holder.time.setText(item.getDateText());
+		holder.time.setText(item.getText());
 		holder.itemView.setBackgroundColor(item.getColor(position));
 	}
 }

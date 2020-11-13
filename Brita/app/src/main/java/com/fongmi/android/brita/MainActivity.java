@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fongmi.android.brita.adapter.RecordAdapter;
+import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,15 +70,14 @@ public class MainActivity extends AppCompatActivity implements RecordAdapter.OnI
 	}
 
 	@Override
-	public void onItemClick(String text) {
-		if (mToast != null) mToast.cancel();
-		mToast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
-		mToast.show();
-	}
-
-	@Override
 	public void onLongClick(int position) {
 		mAdapter.remove(position);
 		refresh(false);
+	}
+
+	@Override
+	protected void onDestroy() {
+		FirebaseDatabase.getInstance().getReference().setValue(AppDatabase.getInstance().getDao().getAll());
+		super.onDestroy();
 	}
 }
